@@ -11,7 +11,6 @@ import org.eclipse.emf.common.util.EList
 import org.etl.util.ParameterisationEngine
 import java.util.ArrayList
 import java.sql.SQLException
-import akka.actor._
 import scala.util.control.Exception.Finally
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.entity.UrlEncodedFormEntity
@@ -20,6 +19,7 @@ import com.google.gson.Gson
 import org.apache.http.entity.StringEntity
 
 class ModelTrainingAction extends org.etl.command.Action with LazyLogging {
+  val detailMap = new java.util.HashMap[String, String]
 
   def execute(context: org.etl.command.Context, action: org.etl.sparrow.Action): org.etl.command.Context = {
     val modeltrainingAsIs: org.etl.sparrow.Mahout = action.asInstanceOf[org.etl.sparrow.Mahout]
@@ -28,11 +28,11 @@ class ModelTrainingAction extends org.etl.command.Action with LazyLogging {
     try {
       val postData = modeltraining.getValue
       val gson = new Gson
-       // create an HttpPost object
+      // create an HttpPost object
       // val url = modeltraining.getUrl
       val post = new HttpPost("http://localhost:8008")
-    //  val hkey = modeltraining.getHkey
-   //  val hvalue = modeltraining.getHvalue
+      //  val hkey = modeltraining.getHkey
+      //  val hvalue = modeltraining.getHvalue
 
       // set the Content-type
       post.setHeader("Content-type", "application/json")
@@ -70,7 +70,18 @@ class ModelTrainingAction extends org.etl.command.Action with LazyLogging {
     val modeltraining: org.etl.sparrow.Mahout = CommandProxy.createProxy(modeltrainingAsIs, classOf[org.etl.sparrow.Mahout], context)
 
     val expression = modeltraining.getCondition
-    ParameterisationEngine.doYieldtoTrue(expression)
+    try {
+      val output = ParameterisationEngine.doYieldtoTrue(expression)
+      detailMap.putIfAbsent("condition-output", output.toString())
+      output
+    } finally {
+      if (expression != null)
+        detailMap.putIfAbsent("condition", "LHS=" + expression.getLhs + ", Operator=" + expression.getOperator + ", RHS=" + expression.getRhs)
+
+    }
+  }
+  def generateAudit(): java.util.Map[String, String] = {
+    detailMap
   }
 }
 

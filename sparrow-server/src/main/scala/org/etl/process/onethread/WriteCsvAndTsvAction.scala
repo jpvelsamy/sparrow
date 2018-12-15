@@ -1,7 +1,6 @@
 package org.etl.process.onethread
 
 import com.typesafe.scalalogging.LazyLogging
-import org.etl.sparrow.Action
 import org.etl.command.Context
 import org.etl.util.ResourceAccess
 import org.etl.command.CommandProxy
@@ -11,7 +10,6 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
-import com.opencsv.CSVWriter
 import scala.collection.JavaConversions._
 import java.io.Writer
 import java.io.FileOutputStream
@@ -20,7 +18,9 @@ import java.io.BufferedOutputStream
 import java.io.File
 
 class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
-  def execute(context: Context, action: Action): Context = {
+  val detailMap = new java.util.HashMap[String, String]
+
+  def execute(context: org.etl.command.Context, action: org.etl.sparrow.Action): Context = {
     val writecsvandtsvAsIs = action.asInstanceOf[org.etl.sparrow.WriteCsvAndTsv]
     val writecsvandtsv: org.etl.sparrow.WriteCsvAndTsv = CommandProxy.createProxy(writecsvandtsvAsIs, classOf[org.etl.sparrow.WriteCsvAndTsv], context)
 
@@ -42,7 +42,7 @@ class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
 
     val fop: FileOutputStream = new FileOutputStream(to)
     val out: Writer = new OutputStreamWriter(new BufferedOutputStream(fop))
-    var column : String = ""
+    var column: String = ""
     if (!to.exists()) {
       to.createNewFile()
     }
@@ -54,9 +54,9 @@ class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
     while (ars.next()) {
       for (i <- 1 to ncols) {
         column = ars.getString(i)
-        if(column !=null)
-        column = column.replaceAll("[^a-zA-Z0-9-:]", " ")
-        out.append("\""+column+"\"")
+        if (column != null)
+          column = column.replaceAll("[^a-zA-Z0-9-:]", " ")
+        out.append("\"" + column + "\"")
         if (i < ncols) out.append(delim) else out.append("\r\n")
       }
     }
@@ -69,12 +69,23 @@ class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
     context
   }
 
-  def executeIf(context: Context, action: Action): Boolean = {
+  def executeIf(context: org.etl.command.Context, action: org.etl.sparrow.Action): Boolean = {
     val writecsvandtsvAsIs = action.asInstanceOf[org.etl.sparrow.WriteCsvAndTsv]
     val writecsvandtsv: org.etl.sparrow.WriteCsvAndTsv = CommandProxy.createProxy(writecsvandtsvAsIs, classOf[org.etl.sparrow.WriteCsvAndTsv], context)
 
     val expression = writecsvandtsv.getCondition
-    ParameterisationEngine.doYieldtoTrue(expression)
+    try {
+      val output = ParameterisationEngine.doYieldtoTrue(expression)
+      detailMap.putIfAbsent("condition-output", output.toString())
+      output
+    } finally {
+      if (expression != null)
+        detailMap.putIfAbsent("condition", "LHS=" + expression.getLhs + ", Operator=" + expression.getOperator + ", RHS=" + expression.getRhs)
+
+    }
+  }
+  def generateAudit(): java.util.Map[String, String] = {
+    detailMap
   }
 
 }

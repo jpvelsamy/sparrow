@@ -201,15 +201,22 @@ SlackPUT:
 
 	
 Copydata:
-	'copydata' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'using'
+	'copydata' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'by-batch' limit=STRING 'using'
 	'{'
 		value=SelectStatement
 	'}' 'on-condition' condition=Expression
 ;
 
+Mahout:
+	'mahout' 'as' name= STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
 
-WriteCsv:
-	'writecsv' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'with'  delim= STRING 'using'
+
+WriteCsvAndTsv:
+	'writecsvandtsv' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'with'  delim= STRING 'using'
 	'{'
 		value=SelectStatement
 	'}' 'on-condition' condition=Expression
