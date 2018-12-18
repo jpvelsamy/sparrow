@@ -13,9 +13,9 @@ import java.io.FileReader
 object SparrowServer extends Application with LazyLogging{
   def main(args:Array[String]){
     
-    logger.info("Starting the restlet server to take in commands, at port 9377")
+    logger.info("Starting the restlet server to take in commands, at port 2909")
     val component = new Component()
-    component.getServers().add(Protocol.HTTP, 9377)
+    component.getServers().add(Protocol.HTTP, 2909)
     // Attach the sample application.
     component.getDefaultHost().attach(this)
     // Start the component.    
