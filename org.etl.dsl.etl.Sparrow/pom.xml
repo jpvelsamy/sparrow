@@ -224,30 +224,10 @@
 			<id>Ibibo</id>
 			<url>http://mirrors.ibiblio.org/maven3/</url>
 		</repository>
-		<repository>
-			<id>scala</id>
-			<name>Scala Tools</name>
-			<url>http://scala-tools.org/repo-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+
 	</repositories>
 	<pluginRepositories>
-		<pluginRepository>
-			<id>scala</id>
-			<name>Scala Tools</name>
-			<url>http://scala-tools.org/repo-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
+
 	</pluginRepositories>
 	<dependencies>
 
