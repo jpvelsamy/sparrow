@@ -1,0 +1,13 @@
+REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (4, '1', 'oltp/candy-intg', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/candy_lead?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 17:22:05');
+
+REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (5, '1', 'audit/candy_lead-audit', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/spw_audit?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 18:42:29');
+
+
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('candycrm.wp.leadingestion', 'filepath', 'candycrm.wp.leadingestion.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('candycrm.wp.leadingestion', 'integration-db', 'oltp/candy_lead-intg', 'Y');
+
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-db','oltp/candy_lead-intg','Y');
+
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-schema','candy_lead','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('wordpress-schema','bitnami_wordpress','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('audit', 'audit/candy_lead-audit', 'Y');

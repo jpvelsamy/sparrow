@@ -1,0 +1,934 @@
+From 29 th onwards I am going to call the framework as doozle instead of sparrow
+
+Status of setting up the machine
+1. Fixed the sudo apt-get update had issue - throwing core dump
+	https://askubuntu.com/questions/943463/library-corruption-error-during-apt-get-update
+2. Unable to access lock issue
+	https://askubuntu.com/questions/15433/unable-to-lock-the-administration-directory-var-lib-dpkg-is-another-process
+3. Installing full screen support
+	https://askubuntu.com/questions/788161/how-to-set-the-screen-resolution-in-ubuntu-16-04-64-bit-running-under-vmware-wor
+4. Installing cairo dock
+	http://linuxpitstop.com/install-cairo-dock-on-ubuntu-15-04/5
+5. 10 things to install after installing ubuntu
+	https://www.tecmint.com/things-you-mostly-need-to-do-after-installing-ubuntu-16-04/2/
+
+
+Slush
+1. Uses sparrow to rely on building the propreitary processes
+2. Sparrow not only will host the dsl code, but also will have the runtime environment
+3. Slush will host only the processes meaent for chimera project
+4. Slush will also host any propreitary java code meant for slush integration
+5. Slush will also use the utilities project available under jpvelsamy to build the management console to manage both sparrow and chimera instances
+6. Checkout slush also into sparrow workspace
+7. Build a new eclipse plugin and import it into usual java ide using text ide
+
+For now I will make sure that I have enough grammar support to deal with our current requirements
+1. Run the sequence of sql steps to execute the demand forecast table
+2. perform audit related activities
+3. Run google caltendar integration work
+
+
+Required actions
+1. readrow
+2. callprocess
+3. transform
+4. publishevent
+5. writeaudit
+6. writecsv
+
+
+August 31
+Currently this is what I have done
+1. Setting up the virtual machine
+2. Installing necessary components - Mariadb is still missing though.
+3. ce more went through my external dsl video
+4. Setup the sparrow codebase
+5. Created a new project called slush in chimera's codebase
+6. Created a new branch for sparrow
+7. Created a new branch for Slush
+8. Added scala nature to the sparrow pom
+9. Adding scala plugin to eclipse
+10. Installed both xtext and java ide
+11. I have installed mariadb 
+
+
+Mariadb installation
+http://idroot.net/linux/install-mariadb-ubuntu-16-04/ 		
+
+Issue with root having not access
+http://nixmash.com/post/fix-for-mysql-rootlocalhost-access-denied-on-new-installs	
+
+
+Added restlet to the pom - Had issue in discovering the binary as it was not found in standard repositories
+
+https://stackoverflow.com/questions/11173761/restlet-maven-dependencies
+
+I am little confused with respect to choosing the right logging solution. Will determine what's best eventually.
+But for now, I am going to stick to typesafe's offering - scala logging. Though I do not like the fact that it 
+looks like inherting the logger, for now I shall live with it.
+
+
+I have come really a long distance today and with the following status update, I am signing off for today
+1. Added grammar support
+2. Added scala support
+3. Added the first iteration of the process runtime
+
+04/Sep/2017 - Starting time 10.30
+To change the color of the ls font 
+https://askubuntu.com/questions/466198/how-do-i-change-the-color-for-directories-with-ls-in-the-console
+https://windows.gadgethacks.com/how-to/change-font-size-windows-10-0166687/
+https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
+
+I have taken care of setting up the environment,
+1. Setting up the windows using the display size to 125%
+2. Increasing the font size for Eclipse
+3. Increasing the font fize for ubuntu bash
+
+The folder color is disturbing in ubuntu bash, so fixing it first
+https://github.com/Microsoft/vscode/issues/7556
+https://github.com/neilpa/cmd-colors-solarized - dit not work
+
+Spent nearly an hour and finally found the solution in here
+https://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/
+
+Another potential good read on changing the color of the prompt
+https://www.howtogeek.com/307701/how-to-customize-and-colorize-your-bash-prompt/
+
+Actual solution
+export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\]\=>"
+
+The next thing is to get the python based build ready
+I have indeed copied the files, but for now  I am backing off as I am not
+too keen on fixing another stupid ops problem for now
+
+I will just do 
+mvn clean compile install -Dmaven.test.skip=true
+
+mvn install:install-file -Dfile=/mnt/e/workspace/sparrow/sparrow-server/ClickSend-3.1.0.jar -DgroupId=ClickSend     -DartifactId=ClickSend -Dversion=3.1.0 -Dpackaging=jar
+
+mvn install:install-file -Dfile=/home/sid/Workspace/sparrow/sparrow-serverClickSend-3.1.0.jar -DgroupId=ClickSend -DartifactId=ClickSend -Dversion=3.1.0 -Dpackaging=jar
+
+wget -O "start.fb.log" http://localhost:9377/process/bonsai.leadingestion.process/1/start
+
+On the fatjar item, I have decided to use alchemi option
+http://davidb.github.io/scala-maven-plugin
+
+mvn scala:run -Dlauncher=spw
+
+I got stuck on the second item for nearlly four hours !
+For now I have decided not pursue querulous because of lack of complete support
+I have written my version of the configuration code and moving on to next item
+
+
+Moving on the aliasn name to file name resolution
+
+
+Checking out from chimera, when you have two different bit bucket accounts
+git clone git@chimera.bitbucket.org:jana-lasalle/slush.git
+
+drop this changed configuration(filename-config) into your $user/.ssh folder
+Host chimera.bitbucket.org
+User git
+Hostname bitbucket.org
+PreferredAuthentications publickey
+IdentityFile /c/Users/Sandeep/.ssh/id_rsa
+
+Host junome.bitbucket.org
+User git
+Hostname bitbucket.org
+PreferredAuthentications publickey
+IdentitiesOnly yes
+IdentityFile /c/Users/Sandeep/.ssh/junome_key
+
+jSON choices
+https://manuel.bernhardt.io/2015/11/06/a-quick-tour-of-json-libraries-in-scala/
+https://github.com/lift/lift/tree/master/framework/lift-base/lift-json/
+
+So far I have made sure that the ProcessRuntime in the single thread
+model is complete till the time the process gets fired. Now I need to
+turn my focus towards getting both the actions implemented
+
+I have found a good reference to the maven directory structure article
+
+https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
+
+
+Google calendar recurrence
+https://developers.google.com/google-apps/calendar/recurringevents#creating_recurring_events
+
+Issue List
+1. Need to organize the database resource names under roof
+	- config-store - system
+	- audit-store - system
+	- chimera-lms - app
+	
+2. Need to further enrich the SQL statement grammar
+3. Need to start working on the actor model
+4. Need to complete the surrounding environment support
+5. Need to provide the environment to my team 
+6. Need to further add support for auditing
+7. Refactor Start process code and call process code
+8. Need to add executeif support	
+9. Auditing invocation
+	- Context persistence for process
+	- Relevant context for action
+10. exception handling
+11. Boundary case issues
+12. Appropriate logging - properly using the scala logging formats
+13. Documentation
+14. Dockerization
+15. Push execute mode the REST path	
+16. Dont start the process if there is existing process that did not complete correctly
+17. Need to add the root instance id to the audit trail
+18. Try being empty cannot be forgiven
+19. Catch and Finally being empty should be forgiven
+20. Conn close has not been done in a lot of actions
+21. Authenticationt to make a rest call to doozle framework is not yet done
+22. Need to add drop file support
+
+	
+
+Fixed the scala ide issue by following the below thread
+https://groups.google.com/forum/#!topic/scala-ide-user/kqLyBUsuxbw
+
+https://storage.googleapis.com/scalaide_4_6_oxygen/site/
+
+
+Fixed the junit issue by following the below thread
+https://stackoverflow.com/questions/31469417/eclipse-throws-java-lang-nullpointerexception-when-running-spring-junit
+
+http://danielkummer.github.io/git-flow-cheatsheet/
+http://nvie.com/posts/a-successful-git-branching-model/
+
+
+Mariadb JSON format
+https://mariadb.com/kb/en/library/connect-json-table-type/
+https://mariadb.com/kb/en/library/json-functions/
+http://serge.frezefond.com/2016/01/mariadb-and-native-json-support/
+
+Flat json produce right out of mariadb
+http://serge.frezefond.com/2015/04/select-from-a-mariadb-table-into-json-format/
+
+http://www.wagonhq.com/sql-tutorial/values-from-nested-json
+
+
+Installing the connect engine
+https://mariadb.com/kb/en/library/loading-the-connect-storage-engine/
+https://mariadb.com/kb/en/library/loading-the-connect-storage-engine/
+
+INSTALL SONAME 'ha_connect.dll';
+
+sudo apt-get install mariadb-plugin-connect
+
+Finding the version of mariadb
+SHOW STORAGE ENGINES;
+SELECT VERSION();
+
+
+Connect file path
+https://mariadb.com/kb/en/library/connect-table-types-data-files/
+
+
+Changing the data directory
+https://stackoverflow.com/questions/1795176/how-to-change-mysql-data-directory
+
+jdbc table type
+https://mariadb.com/kb/en/library/connect-jdbc-table-type-accessing-tables-from-another-dbms/
+
+
+The trick is to move the json file into the folder in which the mariadb schema is present
+
+DROP TABLE 1234_COLLECTION_DATA;
+
+CREATE TABLE 1234_COLLECTION_DATA(
+Label char(128) field_format='fields:[X]:fieldLabel',
+Value char(128) field_format='fields:[X]:fieldValue'
+)engine=CONNECT table_type=JSON File_name='Inbound-Spoors-Collection-form.json';
+
+SELECT COUNT(*) FROM 1234_COLLECTION_DATA;
+SELECT Label, Value from 1234_COLLECTION_DATA;
+
+
+
+https://mariadb.com/kb/en/library/creating-and-dropping-connect-tables/
+
+https://www.slideshare.net/KangarootLinux/maria-db-sergefrezefondconnectstorageenginepdf
+
+Invalid path
+https://stackoverflow.com/questions/9834776/java-nio-file-path-issue
+
+
+https://jsonformatter.org
+
+CREATE DATABASE chimera_integration;
+
+use chimera_integration;
+
+CREATE TABLE `PARENT_DATA` (
+  `calendarId` int(11) DEFAULT NULL,
+  `transactionDate` varchar(25) DEFAULT NULL,
+  `actualDisbursementDate` varchar(25) DEFAULT NULL,
+  `processid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `CLIENT_DATA` (
+  `clientid` int(11) DEFAULT NULL,
+  `attendanceid` int(11) DEFAULT NULL,
+  `loanid` int(11) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `processid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `spoors_header_data` (
+    `key_` VARCHAR(50) NULL DEFAULT NULL,
+    `value` VARCHAR(50) NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO `spoors_header_data` (`Key_`, `Value`) VALUES ('host', 'nd.spoors.in');
+INSERT INTO `spoors_header_data` (`Key_`, `Value`) VALUES ('Accept', 'application/json, text/plain, */*');
+
+
+CREATE TABLE `header_data` (
+    `key_` VARCHAR(50) NULL DEFAULT NULL,
+    `value` VARCHAR(50) NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO `header_data` (`key_`, `value`) VALUES ('host', 'lab.lasalle.in');
+
+INSERT INTO `header_data` (`key_`, `value`) VALUES ('Accept', 'application/json, text/plain, */*');
+
+INSERT INTO `header_data` (`key_`, `value`) VALUES ('Fineract-Platform-TenantId', 'default');
+
+CREATE TABLE `CLIENT_FPS_DATA_OVERALL` (
+  `clientid` int(11) DEFAULT NULL,
+  `clientSignature` varchar(100) DEFAULT NULL,
+  `processid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `OVERALL_DENOMINATION` (
+	`branch` VARCHAR(25) NULL DEFAULT NULL,
+	`groupid` VARCHAR(25) NULL DEFAULT NULL,
+	`groupname` VARCHAR(25) NULL DEFAULT NULL,
+	`collectiondate` VARCHAR(25) NULL DEFAULT NULL,
+	`disbursementdate` VARCHAR(25) NULL DEFAULT NULL,
+	`calendarid` VARCHAR(25) NULL DEFAULT NULL,
+	`2000_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`500_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`200_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`100_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`50_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`20_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`10_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`5_Note` VARCHAR(25) NULL DEFAULT NULL,
+	`10_Coin` VARCHAR(25) NULL DEFAULT NULL,
+	`5_Coin` VARCHAR(25) NULL DEFAULT NULL,
+	`2_Coin` VARCHAR(25) NULL DEFAULT NULL,
+	`1_Coin` VARCHAR(25) NULL DEFAULT NULL,
+	`Total_Collected_Notes` VARCHAR(25) NULL DEFAULT NULL,
+	`Amount_collected_in_Notes` VARCHAR(25) NULL DEFAULT NULL,
+	`Total_coins_collected` VARCHAR(25) NULL DEFAULT NULL,
+	`Amount_collected_in_Coins` VARCHAR(25) NULL DEFAULT NULL,
+	`Total_Amount_Collected` VARCHAR(25) NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `OVERALL_JLGCOLLECTION` (
+	`groupid` VARCHAR(50) NULL DEFAULT NULL,
+	`clientid` VARCHAR(50) NULL DEFAULT NULL,
+	`clientName` VARCHAR(100) NULL DEFAULT NULL,
+	`attendanceid` VARCHAR(50) NULL DEFAULT NULL,
+	`instanceid` VARCHAR(50) NULL DEFAULT NULL,
+	`loanid` VARCHAR(50) NULL DEFAULT NULL,
+	`amount` VARCHAR(50) NULL DEFAULT NULL,
+	`calendarid` VARCHAR(50) NULL DEFAULT NULL,
+	`transactionDate` VARCHAR(50) NULL DEFAULT NULL,
+	`actualDisbursementDate` VARCHAR(50) NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE DATABASE audit;
+
+
+
+use audit;
+
+
+
+CREATE TABLE `command_audit` (
+	`command_id` INT(11) NOT NULL AUTO_INCREMENT,
+
+	`instance_id` INT(11) NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+	`end` DATETIME NULL DEFAULT NULL,
+	`action_name` VARCHAR(150) NULL DEFAULT NULL,
+
+	`process_name` VARCHAR(150) NULL DEFAULT NULL,
+	`command_config` TEXT NULL DEFAULT NULL,
+
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+	PRIMARY KEY (`command_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+
+CREATE TABLE `instance_audit` (
+	`instance_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`instance_name` VARCHAR(150) NOT NULL DEFAULT '0',
+
+	`mode` VARCHAR(100) NOT NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	`end` DATETIME NULL DEFAULT NULL,
+
+	`hostname` VARCHAR(50) NULL DEFAULT NULL,
+	`file` VARCHAR(500) NULL DEFAULT NULL,
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+
+	`context_log` TEXT NULL DEFAULT NULL,
+	`root_ref_id` INT(11) NULL DEFAULT NULL,
+
+	PRIMARY KEY (`instance_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+
+;
+
+
+
+CREATE TABLE `statement_audit` (
+	`statement_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`action_id` INT(11) NULL DEFAULT '0',
+
+	`action_name` VARCHAR(50) NULL DEFAULT '0',
+	`process_name` VARCHAR(50) NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+	`end` DATETIME NULL DEFAULT NULL,
+	`rows_written` INT(11) NULL DEFAULT NULL,
+	`statement_config` TEXT NULL DEFAULT NULL,
+
+	`rows_read` INT(11) NULL DEFAULT NULL,
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+	
+	PRIMARY KEY (`statement_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE DATABASE spw_audit;
+
+
+
+use spw_audit;
+
+
+
+CREATE TABLE `command_audit` (
+	`command_id` INT(11) NOT NULL AUTO_INCREMENT,
+
+	`instance_id` INT(11) NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+	`end` DATETIME NULL DEFAULT NULL,
+	`action_name` VARCHAR(150) NULL DEFAULT NULL,
+
+	`process_name` VARCHAR(150) NULL DEFAULT NULL,
+	`command_config` TEXT NULL DEFAULT NULL,
+
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+	PRIMARY KEY (`command_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+
+CREATE TABLE `instance_audit` (
+	`instance_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`instance_name` VARCHAR(150) NOT NULL DEFAULT '0',
+
+	`mode` VARCHAR(100) NOT NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	`end` DATETIME NULL DEFAULT NULL,
+
+	`hostname` VARCHAR(50) NULL DEFAULT NULL,
+	`file` VARCHAR(500) NULL DEFAULT NULL,
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+
+	`context_log` TEXT NULL DEFAULT NULL,
+	`root_ref_id` INT(11) NULL DEFAULT NULL,
+
+	PRIMARY KEY (`instance_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+
+;
+
+
+
+CREATE TABLE `statement_audit` (
+	`statement_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`action_id` INT(11) NULL DEFAULT '0',
+
+	`action_name` VARCHAR(50) NULL DEFAULT '0',
+	`process_name` VARCHAR(50) NULL DEFAULT '0',
+	`start` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+	`end` DATETIME NULL DEFAULT NULL,
+	`rows_written` INT(11) NULL DEFAULT NULL,
+	`statement_config` TEXT NULL DEFAULT NULL,
+
+	`rows_read` INT(11) NULL DEFAULT NULL,
+	`status` SMALLINT(6) NULL DEFAULT NULL,
+	
+	PRIMARY KEY (`statement_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE DATABASE spw_config;
+
+use spw_config;
+
+
+CREATE TABLE `spw_common_config` (
+	`variable` VARCHAR(150) NULL DEFAULT NULL,
+	`value` VARCHAR(500) NULL DEFAULT NULL,
+	`active` ENUM('Y','N') NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `spw_instance_config` (
+	`instance` VARCHAR(150) NULL DEFAULT NULL,
+	`process` VARCHAR(150) NULL DEFAULT NULL,
+	`variable` VARCHAR(150) NULL DEFAULT NULL,
+	`value` VARCHAR(500) NULL DEFAULT NULL,
+	`active` ENUM('Y','N') NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE TABLE `spw_process_config` (
+	`process` VARCHAR(150) NULL DEFAULT NULL,
+	`variable` VARCHAR(150) NULL DEFAULT NULL,
+	`value` VARCHAR(500) NULL DEFAULT NULL,
+	`active` ENUM('Y','N') NULL DEFAULT NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE TABLE `spw_resource_config` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`config_type` VARCHAR(50) NULL DEFAULT NULL,
+	`config_name` VARCHAR(50) NULL DEFAULT NULL,
+	`auth_info` VARCHAR(1000) NULL DEFAULT NULL,
+	`resource_url` VARCHAR(1000) NULL DEFAULT NULL,
+	`active` ENUM('Y','N') NULL DEFAULT NULL,
+	`created_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=3
+;
+
+REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (1, '1', 'oltp/chimera-intg', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/chimera_integration?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 17:22:05');
+REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (2, '1', 'audit/chimera-audit', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/spw_audit?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 18:42:29');
+
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process', 'google-cal-auth-file', 'auth/Dhuruva-BMS-516dab070732.p12', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process', 'google-svs-user-email-id', '59413973790-compute@developer.gserviceaccount.com', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process', 'google-id', 'fa750e3a810282157696228d85ef83aca58d6340', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process', 'filepath', 'publish.demandforecast.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('test.callprocess.process', 'filepath', 'test.callprocess.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('test.doozle.process', 'filepath', 'test.doozle.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('test.rest.process', 'filepath', 'test.rest.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.collection.process', 'filepath', 'inbound.collection.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.collection.process', 'filepath', 'outbound.collection.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.collection.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.collection.process', 'integration-schema', 'chimera_integration', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.collection.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.collection.process', 'lms-schema', 'mifostenant-default', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.denomination.process', 'filepath', 'inbound.denomination.process.spw', 'Y');
+
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.denomination.process', 'filepath', 'outbound.denomination.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.denomination.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.denomination.process', 'integration-schema', 'chimera_integration', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.denomination.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.denomination.process', 'lms-schema', 'mifostenant-default', 'Y');
+
+
+
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.clientfps.process', 'filepath', 'inbound.clientfps.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.employeefps.process', 'filepath', 'inbound.employeefps.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.clientfps.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.employeefps.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.clientfps.process', 'integration-schema', 'chimera_integration', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.clientfps.process', 'lms-schema', 'mifostenant-default', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.clientfps.process', 'filepath', 'outbound.clientfps.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.clientfps.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.clientfps.process', 'spwaudit-schema', 'spw_audit', 'Y');
+
+
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.employeefps.process', 'integration-schema', 'chimera_integration', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.employeefps.process', 'lms-schema', 'mifostenant-default', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.employeefps.process', 'filepath', 'outbound.employeefps.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.employeefps.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.jlgcollection.process', 'filepath', 'inbound.jlgcollection.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.jlgcollection.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.employeefps.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'integration-schema', 'chimera_integration', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'lms-schema', 'mifostenant-default', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'filepath', 'outbound.jlgcollection.process.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+
+
+REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process#1', 'publish.demandforecast.process', 'lms', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, `active`) VALUES ('test.callprocess.process#1', 'test.callprocess.process', 'lms', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, `active`) VALUES ('test.rest.process#1', 'test.rest.process', 'lms', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, `active`) VALUES ('test.doozle.process#1', 'test.doozle.process', 'lms', 'oltp/chimera-intg', 'Y');
+
+
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('basepath', 'root', 'Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('runmode', 'single', 'Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('audit', 'audit/chimera-audit', 'Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-db','oltp/chimera-intg','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-schema','chimera_integration','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('lms-schema','mifostenant-default','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('json.storagepath', '/var/lib/mysql/chimera_integration', 'Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('json.storagepath', 'F:/mariadb/data/chimera_integration', 'Y');
+
+
+-------------------------------------------------------------
+				USE SELECT IN WHERE CLAUSE
+-------------------------------------------------------------
+
+select id,DATE(created_date) from `mifostenant-default`.a where NOT EXISTS (select DATE(end) as date from spw_audit.instance_audit where `mifostenant-default`.a.created_date < spw_audit.instance_audit.end  );
+
+-------------------------------------------------------------
+						GROUP CONCAT
+-------------------------------------------------------------
+
+SELECT GROUP_CONCAT(Client_Id) as Client_Id
+   FROM 7_jlg_outbound_collection
+   GROUP BY Group_Id;
+
+
+--------------------------------------------------------------
+
+
+--------------------------------------------------------------
+					SET MAX_CONNECTIONS
+--------------------------------------------------------------
+
+SHOW VARIABLES LIKE "MAX_CONNECTIONS";
+
+SET GLOBAL MAX_CONNECTIONS=300;
+
+
+
+
+drop table demand_forecast_overall;
+
+create table demand_forecast_overall as
+select 
+o.name AS 'office_name',
+o.id AS 'office_id',
+c.display_name as 'client_name',
+c.id as 'client_id',
+m.display_name AS 'group_name',
+m.id as 'group_id',
+m.parent_id as 'centre_id',
+r.duedate AS 'due_date',
+r.installment AS 'due_no',
+s.display_name AS 'loan_officer_name',
+s.id as 'loan_officer_id',
+l.disbursedon_date as 'actual_disbursed_date',
+(r.interest_amount + r.principal_amount) AS 'collection_amount',
+l.id as 'loan_id'
+from m_office o 
+join m_group m on m.office_id = o.id
+join m_loan l on l.group_id = m.id 
+join m_client c on c.id = l.client_id
+join m_loan_repayment_schedule r on r.loan_id = l.id
+join m_staff s on s.id = l.loan_officer_id
+where l.loan_status_id = 300
+
+
+ALTER TABLE  demand_forecast_overall add column calendar_id INT;
+
+alter table demand_forecast_overall add index idx_centre_id(centre_id);
+
+ALTER TABLE demand_forecast_overall ADD INDEX (client_id);
+
+
+UPDATE demand_forecast_overall , m_calendar_instance  inner join demand_forecast_overall
+ on demand_forecast_overall.group_id=m_calendar_instance.entity_type_id 
+ SET demand_forecast_overall.calendar_id=m_calendar_instance.calendar_id WHERE m_calendar_instance.entity_type_enum=4;
+
+Correct One 
+
+ UPDATE demand_forecast_overall, m_calendar_instance SET demand_forecast_overall.calendar_id = m_calendar_instance.calendar_id 
+ WHERE demand_forecast_overall.centre_id=m_calendar_instance.entity_id  AND m_calendar_instance.entity_type_enum=4;
+
+------------------------------------------------------------------
+	IF CONNECTIVITY IR NULL POINTER ERROR IN SPARROW SERVER
+------------------------------------------------------------------
+
+1. When i tried to compile and run the sparrow server it shows connectivity erro so i checked the config.props under the target/classess and the mysql port number was 3307 so i changed it to 3306
+2. Then there was a null pointer error which showed after fixing the port and it was because after i compiled the project it deleted all the files inside /target/classess/ so i had to copy the process/root folder from slush and pasted it in /target/classess
+
+
+
+
+
+
+
+
+
+
+
+Rest client pending work
+Authentication
+-There is standard basic authentication
+-And there is mifos properietary authentication
+
+I will first implement the mifos way completely and then shall await spoor's support
+I also understand the future challenges will be authentication more than anything else
+
+
+
+Google calendar investigation work
+This is the second file in the series to track all the code changes that we do to this system
+
+Calender function
+	- Decided to go with Goolgle calender api for now as I do not see a proper support for calendar api support in Zoho
+	- Need to define the interfaces in such a way so that I can plugin in Zoho api eventually
+
+
+Google calender api urls
+	- https://developers.google.com/api-client-library/java/apis/calendar/v3
+	- https://developers.google.com/api-client-library/java/google-api-java-client/dev-guide
+	- https://github.com/google/google-api-java-client-samples
+
+
+Google calendar service accout needed for server to server oauth integration
+	- https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#using
+	- https://developers.google.com/identity/protocols/OAuth2ServiceAccount - this might be required when we onboard to Linode
+
+
+Google service account api
+	- https://github.com/GoogleCloudPlatform/cloud-storage-docs-xml-api-examples/blob/master/storage-serviceaccount-cmdline-sample/src/main/java/StorageServiceAccountSample.java
+	- https://developers.google.com/identity/protocols/googlescopes#calendarv3	
+
+References
+	- https://github.com/google/google-api-java-client-samples/blob/master/oauth2-cmdline-sample/src/main/java/com/google/api/services/samples/oauth2/cmdline/OAuth2Sample.java
+	- Getting starterd guide
+		https://developers.google.com/api-client-library/java/google-api-java-client/dev-guide
+	- Git hub code base
+		https://github.com/google/google-api-java-client-samples
+	- Calendar api REST API reference
+		https://developers.google.com/apis-explorer/#p/calendar/v3/
+	- Authoring calendar requests
+		https://developers.google.com/google-apps/calendar/auth
+	- Service account refernece
+		https://developers.google.com/identity/protocols/OAuth2ServiceAccount
+		https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#changeserviceaccountandscopes
+	- iOs reference
+		https://stackoverflow.com/questions/34573041/access-google-calendar-in-ios-using-service-account
+	- Java api - Oauth 2
+		https://developers.google.com/api-client-library/java/google-api-java-client/oauth2
+	- Permissions and privileges
+		https://developers.google.com/identity/protocols/googlescopes#calendarv3
+	- erlang - adding private key from json as pem
+		https://github.com/potatosalad/erlang-jose/issues/13
+	- diamto
+		http://www.daimto.com/google-service-accounts-with-json-file/
+	- reading from a string and creating a private key
+		http://www.javased.com/index.php?api=java.security.PrivateKey
+	- Impersonating gmail account
+		https://stackoverflow.com/questions/39510138/google-oauth2-impersonate-service-account-with-usergmail-com/39534420#39534420
+
+	- inserting-google-calendar-entries-with-service-account(this basically addressed the issue)
+		https://stackoverflow.com/questions/26064095/inserting-google-calendar-entries-with-service-account
+
+Code snippet required for service account authentication
+
+	Stub that could be important
+	 // authorization
+	      GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport).
+	          setJsonFactory(JSON_FACTORY).
+	          setServiceAccountId(SERVICE_ACCOUNT_EMAIL).
+	          setServiceAccountPrivateKeyId("fa750e3a810282157696228d85ef83aca58d6340").
+	          setServiceAccountPrivateKeyFromP12File(new File("C:\\Users\\Sandeep\\Downloads\\Dhuruva-BMS-fa750e3a8102.p12")).
+	          setServiceAccountScopes(Collections.singleton(CALENDAR_SCOPE)).   
+	          setServiceAccountUser("lasalle.su@gmail.com").
+	          build();
+
+
+Having issues setting up the sample
+	C:\Users\Sandeep\Desktop\gradle\wrapper\gradle-wrapper.properties to gradle-2.2-all.zip		
+
+
+ Chimera calendar id - 
+ 0n0ki3ca5mgecad17drako13fs@group.calendar.google.com
+
+ 
+ 
+Xtext lsp
+https://typefox.io/xtext-lsp-vs-xtext-web 
+
+10 row issue in maraiadb
+https://jira.mariadb.org/browse/MDEV-7517
+
+DROP TABLE 5678_COLLECTION_DATA;
+
+CREATE TABLE 5678_COLLECTION_DATA(
+fieldLabel char(128) ,
+fieldValue char(128) ,
+uniqueId char(128)
+)engine=CONNECT table_type=JSON File_name='Inbound-Spoors-Collection-form.json' option_list='object=fields';
+
+
+Google contacts
+https://developers.google.com/people/v1/getting-started
+https://developers.google.com/api-client-library/java/apis/people/v1
+https://developers.google.com/people/v1/getting-started?refresh=1&pli=1&authuser=1#project
+https://developers.google.com/gdata/docs/directory
+
+Contact api is replaced by peoples api - https://developers.google.com/people/v1/getting-started?refresh=1&pli=1&authuser=1
+Before you can make requests to the API, you must set up authorization. If you are using a client library, you must also create a service object.
+
+The following code demonstrates how to configure your client and authorize requests using OAuth 2.0 for installed applications.
+
+
+References
+https://github.com/google?page=6
+
+Gdata apis
+Not sure how much the below reference is going to help, nevertheless having it. The gdata api has been deprecated
+Refer to the deprecation list here - https://developers.google.com/gdata/docs/directory. However you can also visit below
+url for further information - https://github.com/google/gdata-java-client
+
+Another reference on gdata deprecation topic
+https://developers.google.com/gdata/docs/client-libraries
+
+
+There are 2 credential creation possibilities in google console(bonsai-crm is the project)
+API Key
+OAuth
+Service account - I know i want this one
+
+Deprecation notice for google contacts was right smack in this url
+https://developers.google.com/google-apps/contacts/v3/
+
+Paralallely
+
+I went and enabled people's api. browser url for reference
+https://console.developers.google.com/apis/api/people.googleapis.com/overview?project=bonsai-crm&authuser=1
+
+Which API are you using?
+Determines what kind of credentials you need.
+Where will you be calling the API from?
+Determines which settings you'll need to configure.
+Anser-  People api
+What data will you be accessing?
+AnswerUser data
+
+Access data belonging to a Google user, with their permission
+Application data
+
+Access data belonging to your own application
+Are you using Google App Engine or Google Compute 
+Engine?
+Yes, I’m using one or both No, I’m not using them 
+
+
+List of all google java api client projects as in github
+https://github.com/google/google-api-java-client
+https://github.com/google/google-api-java-client-samples
+
+Not sure how much the below url is going to help, however I will use it if its needed
+https://stackoverflow.com/questions/16298827/google-contacts-v3-api-oauth-v2-in-java
+
+Service account protocol
+
+https://admin.google.com/tissow.com/AdminHome?chromeless=1#OGX:ManageOauthClients
+https://developers.google.com/identity/protocols/OAuth2ServiceAccount
+
+The trick to making google contact or calander integration work is
+1. You need to have a google app account and not individual gmail account
+2. You need to create service account under your organization(for me its tissow.org)
+3. Your impersonated user should be created under that organization
+4. Also make the service account gain access to the entire domain by choosing "delegate domain wide access"
+5. Dont forget to also enable the people/calendar apis in google cloud for your api to access
+
+Service account id
+bonsai@bonsai-crm-under-tissow-org.iam.gserviceaccount.com
+Service account private key
+8debeae0d4910282754c67cadb177287d3ed8d86
+Service account p12 file
+F:\\google-service-account-keys\\bonsai-crm-under-tissow-org-8debeae0d491.p12
+bonsai-crm-under-tissow-org
+
+
+The blog that made me realize that service account activation and reverse registration of client app inside the admin's cPanel is below,
+http://damon.ghost.io/using-service-account-to-act-on-behalf-of-your-google-apps-users/
+https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority
+
+People service javadoc
+https://developers.google.com/resources/api-libraries/documentation/people/v1/java/latest/com/google/api/services/people/v1/PeopleService.People.html
+
+<h2>Setting up lgpl 5 version in local repo</h2>
+https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html
+
+
+cd /home/jpvel/Software/smartgwt-5.0p
+mvn install:install-file -Dfile=/home/jpvel/Software/smartgwt-5.0p/smartgwt.jar -DpomFile=/home/jpvel/Software/smartgwt-5.0p/maven/pom/smartgwt-lgpl.pom
+
+mvn install:install-file -Dfile=/home/jpvel/Software/smartgwt-5.0p/smartgwt-skins.jar -DpomFile=/home/jpvel/Software/smartgwt-5.0p/maven/pom/smartgwt-skins.pom
+
+<h2>Installing wine </h2>
+http://ubuntuhandbook.org/index.php/2015/12/install-wine-1-8-stable-new-ppa/
+
+
+gcloud compute --project "bonsai-crm" ssh --zone "asia-southeast1-a" "bonsai-crm-instance-1"
+
+
+Install sequence for connect engine
+backup the databases before you do this, because it wipes of the entire cachet
+sudo apt-get install libodbc1
+sudo apt-get install mariadb-plugin-connect
+sudo service mysql status
+sudo service mysql stop
+sudo mysqld_safe --skip-grant-tables
+UPDATE mysql.user SET authentication_string = PASSWORD('password'), plugin = 'mysql_native_password' WHERE User = 'root' AND Host = 'localhost';
+ps -ef | grep mysql
+kill mysql
+sudo service mysql start
+select version();
+show storage engines;

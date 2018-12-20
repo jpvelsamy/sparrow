@@ -56,6 +56,7 @@ Action:
 	|Abort
 	|SmsLeadSms
 	|Mahout
+	|RunR
 	)
 ;
 
@@ -90,6 +91,12 @@ GoogleSendMail:
 	'}' 'on-condition' condition=Expression
 ;
 
+RunR:
+	'runR' name=STRING 'mode-as' executeMode=RunMode 
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
 
 GooglecontactPUT:
 	'gcontact' 'as' name=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING 'with-key' ptwelveFile=STRING 'for-project' project=STRING 'on-behalf-of' impersonatedUser=STRING 'from-source' dbSrc=STRING 'using'

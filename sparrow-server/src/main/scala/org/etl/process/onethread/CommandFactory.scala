@@ -22,7 +22,8 @@ object CommandFactory {
       case "smsleadsms"=>new SmsLeadsAction
       case "writecsvandtsv"=> new WriteCsvAndTsvAction
       case "copydata" => new CopydataAction
-      case "mahout" => new ModelTrainingAction          
+      case "mahout" => new ModelTrainingAction
+      case "runr" => new RunRAction          
     }
   }
 }
