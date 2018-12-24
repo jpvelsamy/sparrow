@@ -215,7 +215,7 @@ Copydata:
 ;
 
 Mahout:
-	'mahout' 'as' name= STRING 'using'
+	'mahout' 'as' name= STRING 'id' id=STRING 'using'
 	'{'
 		value=STRING
 	'}' 'on-condition' condition=Expression
@@ -272,3 +272,6 @@ Operator:
 	'<'|'>'|'=='|'contains'	
 ;
 
+RunMode:
+	'local'|'remote'	
+;

@@ -15,6 +15,7 @@ import org.json.JSONObject
 case class PostData(script: String)
 
 class RunRAction extends org.etl.command.Action with LazyLogging {
+  val detailMap = new java.util.HashMap[String, String]
 
   def restCaller(script: String): Boolean = {
     try {
@@ -42,9 +43,8 @@ class RunRAction extends org.etl.command.Action with LazyLogging {
       if (resultObj.getString("message").equals("success")) {
         println("success")
         true
-        
-      }
-      else{
+
+      } else {
         println("error")
       }
       logger.info("response from python script  #{}", resultObj.getString("message"))
@@ -67,8 +67,18 @@ class RunRAction extends org.etl.command.Action with LazyLogging {
   def executeIf(context: org.etl.command.Context, action: org.etl.sparrow.Action): Boolean = {
     val runR: org.etl.sparrow.RunR = action.asInstanceOf[org.etl.sparrow.RunR]
     val runRActual: org.etl.sparrow.RunR = CommandProxy.createProxy(runR, classOf[org.etl.sparrow.RunR], context)
-    val expression = runRActual.getCondition
-    ParameterisationEngine.doYieldtoTrue(expression)
+    val expression = runR.getCondition
+    try {
+      val output = ParameterisationEngine.doYieldtoTrue(expression)
+      detailMap.putIfAbsent("condition-output", output.toString())
+      output
+    } finally {
+      if (expression != null)
+        detailMap.putIfAbsent("condition", "LHS=" + expression.getLhs + ", Operator=" + expression.getOperator + ", RHS=" + expression.getRhs)
+    }
+  }
+  def generateAudit(): java.util.Map[String, String] = {
+    detailMap
   }
 
 }
