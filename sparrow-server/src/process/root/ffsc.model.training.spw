@@ -2,14 +2,15 @@ process "ffsc.model.training"
 {
 	try
 	{	
-		mahout as "hadoop namenode" using
-			{
-				"hadoop namenode -Y -format -force"
-			}
+	
 		mahout as "stop server" using
 			{
 				"stop-all.sh"
 			}	
+		mahout as "hadoop namenode" using
+			{
+				"hadoop namenode -Y -format -force"
+			}
 		mahout as "start server" using
 			{
 				"start-all.sh"
@@ -20,7 +21,7 @@ process "ffsc.model.training"
 			}
 		mahout as "train sequence" using
 			{
-				"java -cp /home/sid/Workspace/ffs/mahout/target/twitter-naive-bayes-example-1.0-jar-with-dependencies.jar com.chimpler.example.bayes.TweetTSVToSeq /home/sid/Workspace/ffs/mahout/tweets-train.tsv /home/sid/Workspace/ffs/mahout/tweets-seq"
+				"java -cp /home/sid/Workspace/ffs/mahout/target/twitter-naive-bayes-example-1.0-jar-with-dependencies.jar com.chimpler.example.bayes.ModelTrainingService /home/sid/Workspace/ffs/mahout/sample/ApprovedFunnelscsv.csv /home/sid/Workspace/ffs/mahout/tweets-seq"
 			}
 		mahout as "turn off safe mode" using
 			{	
@@ -78,6 +79,10 @@ process "ffsc.model.training"
 			{
 				"hadoop fs -getmerge tweets-vectors/df-count /home/sid/Workspace/ffs/mahout/df-count"
 			}
+		mahout as "inspect the train data"  using
+			{
+				"java -cp /home/sid/Workspace/ffs/mahout/target/twitter-naive-bayes-example-1.0-jar-with-dependencies.jar com.chimpler.example.bayes.Classifier /home/sid/Workspace/ffs/mahout/model /home/sid/Workspace/ffs/mahout/labelindex /home/sid/Workspace/ffs/mahout/dictionary.file-0 /home/sid/Workspace/ffs/mahout/df-count /home/sid/Workspace/ffs/mahout/sample/ApprovedFunnelscsvr.csv"
+			}	
 		
 	}
 	catch	
