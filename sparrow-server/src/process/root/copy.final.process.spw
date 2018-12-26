@@ -1,0 +1,184 @@
+process "copy.final.process"
+{
+	try
+	{
+		transform as "Create-Table" on "${ffsc-db}" using
+	{"
+CREATE TABLE Funnel_${sqlid} (`MarketerLeadID` varchar(255) DEFAULT NULL,
+`vcADID` varchar(255) DEFAULT NULL,
+`TransactionID` varchar(255) DEFAULT NULL,
+`LenderID` varchar(255) DEFAULT NULL,
+`vcReason` varchar(255) DEFAULT NULL,
+`bitApproved` varchar(255) DEFAULT NULL,
+`dtCreated` varchar(255) DEFAULT NULL,
+`bitTesting` varchar(255) DEFAULT NULL,
+`bitIsWeekendLead` varchar(255) DEFAULT NULL,
+`decSecondsToProcess` varchar(255) DEFAULT NULL,
+`decLeadCost` varchar(255) DEFAULT NULL,
+`JobTitle` varchar(255) DEFAULT NULL,
+`Supervisor` varchar(255) DEFAULT NULL,
+`Address` varchar(255) DEFAULT NULL,
+`BankABARouting` varchar(255) DEFAULT NULL,
+`BankName` varchar(255) DEFAULT NULL,
+`CheckDeposit` varchar(255) DEFAULT NULL,
+`City` varchar(255) DEFAULT NULL,
+`CompanyName` varchar(255) DEFAULT NULL,
+`DOB_Month` varchar(255) DEFAULT NULL,
+`DOB_Year` varchar(255) DEFAULT NULL,
+`Email` varchar(255) DEFAULT NULL,
+`FirstName` varchar(255) DEFAULT NULL,
+`LastName` varchar(255) DEFAULT NULL,
+`License` varchar(255) DEFAULT NULL,
+`LicenseState` varchar(255) DEFAULT NULL,
+`SSN` varchar(255) DEFAULT NULL,
+`State` varchar(255) DEFAULT NULL,
+`Zip` varchar(255) DEFAULT NULL,
+`TakeHomePay` varchar(255) DEFAULT NULL,
+`EmployerPhoneNumber` varchar(255) DEFAULT NULL,
+`AccountType` varchar(255) DEFAULT NULL,
+`PayPeriod` varchar(255) DEFAULT NULL,
+`CelNumber` varchar(255) DEFAULT NULL,
+`CurrentlyEmployed` varchar(255) DEFAULT NULL,
+`DateHired_Month` varchar(255) DEFAULT NULL,
+`DateHired_Year` varchar(255) DEFAULT NULL,
+`Months_At_Address` varchar(255) DEFAULT NULL,
+`IsMilitary` varchar(255) DEFAULT NULL,
+`Existing` varchar(255) DEFAULT NULL,
+`RequestedAmount` varchar(255) DEFAULT NULL,
+`bitComplete` varchar(255) DEFAULT NULL,
+`CustomerID` varchar(255) DEFAULT NULL,
+`TransactionStatusID` varchar(255) DEFAULT NULL,
+`AmountRequested` varchar(255) DEFAULT NULL,
+`LenderUserID` varchar(255) DEFAULT NULL,
+`PaperworkStatusID` varchar(255) DEFAULT NULL,
+`vcMissingPaperwork` varchar(255) DEFAULT NULL,
+`bitAutoDefer` varchar(255) DEFAULT NULL,
+`vcNotes` varchar(255) DEFAULT NULL,
+`TransactionExceptionID` varchar(255) DEFAULT NULL,
+`CollectionsLenderUserID` varchar(255) DEFAULT NULL,
+`dtAgreed` varchar(255) DEFAULT NULL,
+`decPaymentAmount` varchar(255) DEFAULT NULL,
+`decCSOFeeAmount` varchar(255) DEFAULT NULL,
+`decLastPaymentAmount` varchar(255) DEFAULT NULL,
+`TransactionCategoryID` varchar(255) DEFAULT NULL,
+`TransactionDenialReasonID` varchar(255) DEFAULT NULL,
+`bitPossibleFraud` varchar(255) DEFAULT NULL,
+`bitAcceptedNoteDisclosure` varchar(255) DEFAULT NULL,
+`bitAcceptedPreauthorizedACH` varchar(255) DEFAULT NULL,
+`bitAcceptedBorrowerIDStatement` varchar(255) DEFAULT NULL,
+`bitAcceptedConsentToAssignWages` varchar(255) DEFAULT NULL,
+`bitMilitaryIAm` varchar(255) DEFAULT NULL,
+`bitBVPass` varchar(255) DEFAULT NULL,
+`bitDLOverride` varchar(255) DEFAULT NULL,
+`bitApprovalAutoDefer` varchar(255) DEFAULT NULL,
+`vcCustomMissingPaperwork` varchar(255) DEFAULT NULL,
+`LenderProductID` varchar(255) DEFAULT NULL,
+`AmountRefinanced` varchar(255) DEFAULT NULL,
+`bitACH` varchar(255) DEFAULT NULL,
+`RefiTransactionID` varchar(255) DEFAULT NULL,
+`numSettlement` varchar(255) DEFAULT NULL,
+`bitMLAPass` varchar(255) DEFAULT NULL,
+`dtSettlementDate` varchar(255) DEFAULT NULL,
+`SolicitNewLoan` varchar(255) DEFAULT NULL,
+`dtSolicitNewLoan` varchar(255) DEFAULT NULL,
+`dtSolicitationProcessed` varchar(255) DEFAULT NULL,
+`StateID` varchar(255) DEFAULT NULL,
+`dtMovedIn` varchar(255) DEFAULT NULL,
+`vcEmail` varchar(255) DEFAULT NULL,
+`bitBadEmail` varchar(255) DEFAULT NULL,
+`vcEmail2` varchar(255) DEFAULT NULL,
+`bitBadEmail2` varchar(255) DEFAULT NULL,
+`vcCellPhone` varchar(255) DEFAULT NULL,
+`vcCellPhoneType` varchar(255) DEFAULT NULL,
+`vcFax` varchar(255) DEFAULT NULL,
+`vcDriversLicenseNumber` varchar(255) DEFAULT NULL,
+`DriversLicenseStateID` varchar(255) DEFAULT NULL,
+`vcOwnRent` varchar(255) DEFAULT NULL,
+`bitEmployed` varchar(255) DEFAULT NULL,
+`bitMakes1200` varchar(255) DEFAULT NULL,
+`bitDirectDepositAccount` varchar(255) DEFAULT NULL,
+`bitUSResident` varchar(255) DEFAULT NULL,
+`bitSendOffers` varchar(255) DEFAULT NULL,
+`bitSend3PartyOffers` varchar(255) DEFAULT NULL,
+`BankStatusID` varchar(255) DEFAULT NULL,
+`vcBankCity` varchar(255) DEFAULT NULL,
+`BankStateID` varchar(255) DEFAULT NULL,
+`dtBankChange` varchar(255) DEFAULT NULL,
+`vcABANumber` varchar(255) DEFAULT NULL,
+`vcAcctType` varchar(255) DEFAULT NULL,
+`EmploymentStatus` varchar(255) DEFAULT NULL,
+`vcEmployerNote` varchar(255) DEFAULT NULL,
+`vcEmployer` varchar(255) DEFAULT NULL,
+`vcJobTitle` varchar(255) DEFAULT NULL,
+`vcSupervisor` varchar(255) DEFAULT NULL,
+`vcWorkPhoneType` varchar(255) DEFAULT NULL,
+`vcWorkPhone2Type` varchar(255) DEFAULT NULL,
+`vcWorkPhone3Type` varchar(255) DEFAULT NULL,
+`intTakeHomePay` varchar(255) DEFAULT NULL,
+`EmploymentShiftID` varchar(255) DEFAULT NULL,
+`dtEmployed` varchar(255) DEFAULT NULL,
+`PayFrequencyID` varchar(255) DEFAULT NULL,
+`ActualPayFrequencyID` varchar(255) DEFAULT NULL,
+`dtPayStartDate` varchar(255) DEFAULT NULL,
+`vcPayNote` varchar(255) DEFAULT NULL,
+`bitAgreement` varchar(255) DEFAULT NULL,
+`vcSpouseCellPhone` varchar(255) DEFAULT NULL,
+`vcSpouseEmployer` varchar(255) DEFAULT NULL,
+`vcSpouseWorkPhone` varchar(255) DEFAULT NULL,
+`SpouseTakeHomePay` varchar(255) DEFAULT NULL,
+`SpouseActualPayFrequencyID` varchar(255) DEFAULT NULL,
+`vcSpouseNotes` varchar(255) DEFAULT NULL,
+`bitLabelPrinted` varchar(255) DEFAULT NULL,
+`ApprovedApps` varchar(255) DEFAULT NULL,
+`bitIsMilitaryPersonal` varchar(255) DEFAULT NULL,
+`dtCollWorked` varchar(255) DEFAULT NULL,
+`bitBadAddress` varchar(255) DEFAULT NULL,
+`bitPaperworkOnFile` varchar(255) DEFAULT NULL,
+`dtDateSigned` varchar(255) DEFAULT NULL,
+`bitFraud` varchar(255) DEFAULT NULL,
+`dtCellPhoneVerified` varchar(255) DEFAULT NULL,
+`dtAddressVerified` varchar(255) DEFAULT NULL,
+`Type` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	"
+	}
+	
+		copydata as "trainseq" from "${ffsc-sqldb}" to "${ffsc-db}" with-batch "8" using
+		{
+			"select * from DataCleansing.dbo.Funnel_${sqlid};
+			insert ignore into Funnel_${sqlid} values"
+		}
+	   transform as "Truncate -table" on "${ffsc-sqldb}" using
+		{
+		"INSERT INTO DataCleansing.dbo.count_leads(tablename,lead_count,Type) SELECT 'Funnel_${sqlid}', count(*),Type from DataCleansing.dbo.Funnel_${sqlid} group by Type;"
+		}
+		
+	    copydata as "trainseq" from "${ffsc-sqldb}" to "${ffsc-db}" with-batch "10" using
+		{
+			"select * from DataCleansing.dbo.count_leads;
+			insert ignore into count_leads values"
+		}
+		
+		 transform as "Truncate -table" on "${ffsc-db}" using
+		{
+		"TRUNCATE ffsc.payload_audit;"
+		}
+	    transform as "Truncate -table" on "${ffsc-sqldb}" using
+		{
+		"UPDATE DataCleansing.dbo.payload_audit SET END_DATE=GETDATE() WHERE tablename='Funnel_${sqlid}';"
+		}
+		copydata as "trainseq" from "${ffsc-sqldb}" to "${ffsc-db}" with-batch "8" using
+		{
+			"select * from DataCleansing.dbo.payload_audit;
+			insert ignore into payload_audit values"
+		}
+				
+
+	}
+	catch
+	{
+	}
+	finally
+	{
+	}
+}

@@ -4,7 +4,7 @@ process "ffsc.writecsv.fromdb"
 	{
 		writecsvandtsv as "writetocsv" from "${ffsc-db}" to "${csv.storagepath}${process-id}_dbtocsv.csv" with "," using
 		{
-			"select * from BasicDataMapping_FFSC_Customers;"
+			"select * from unapprovedleads;"
 		}
 
 	}
