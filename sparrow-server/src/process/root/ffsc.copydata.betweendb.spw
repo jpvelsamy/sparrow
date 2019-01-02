@@ -4,9 +4,33 @@ process "ffsc.model.training"
 	{
 		copydata as "trainseq" from "${ffsc-db}" to "${ffsc-db}" with-batch "100" using
 		{
-			"select * from BasicDataMapping_FFSC_Customers;
+			"select * from BasicDataMapping_FFSC_Customers limit 10;
 			insert ignore into ffc values"
 		}
+		transform as "create-table" on "${ffsc-db}" using
+		{
+			"drop table if exists baba;
+			create table baba(id varchar(255));"
+		}
+		transform as "create-table" on "${ffsc-db}" using
+		{
+			"drop table if exists bababa;
+			create table bababa(id varchar(255));"
+		}
+		transform as "create-table" on "${ffsc-db}" using
+		{
+			"drop table if exists babas;
+			create table babas(id varchar(255));"
+		}	
+		
+		callprocess as "push-jlg-collection-sheet"
+		with-target "ffsc.writecsv.fromdb"
+		from-file "ffsc.writecsv.fromdb.spw"
+		using "${ffsc-db}" for-every 		
+		{
+			"SELECT 1;"
+			
+		}	
 
 	}
 	catch

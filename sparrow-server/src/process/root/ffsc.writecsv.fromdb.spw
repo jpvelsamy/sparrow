@@ -2,9 +2,9 @@ process "ffsc.writecsv.fromdb"
 {
 	try
 	{
-		writecsvandtsv as "writetocsv" from "${ffsc-db}" to "${csv.storagepath}${process-id}_dbtocsv.csv" with "," using
+		writecsvandtsv as "writetocsv" from "${ffsc_full-db}" to "${csv.storagepath}${process-id}_dbtocsv.csv" with "," using
 		{
-			"select * from BasicDataMapping_FFSC_Customers;"
+			"select * from approved_final limit 50;"
 		}
 
 	}

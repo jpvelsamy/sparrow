@@ -299,7 +299,7 @@ ENGINE=InnoDB
 AUTO_INCREMENT=3
 ;
 
-REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (1, '1', 'oltp/chimera-intg', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/chimera_integration?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 17:22:05');
+REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (5, '1', 'oltp/ffsc_full-db', '{ "user": "root", "password": "password"}', 'jdbc:mysql://bonsai-mariadb:3306/ffsc_full?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 17:22:05');
 REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (2, '1', 'audit/chimera-audit', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/spw_audit?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 18:42:29');
 REPLACE INTO `spw_resource_config` (`id`, `config_type`, `config_name`, `auth_info`, `resource_url`, `active`, `created_date`) VALUES (3, '1', 'oltp/mifos-intg', '{ "user": "root", "password": "password"}', 'jdbc:mysql://localhost:3306/mifostenant-default?useUnicode=true&characterEncoding=utf8&dumpQueriesOnException=true', 'Y', '2017-09-24 17:22:05');
 
@@ -348,12 +348,14 @@ REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VAL
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'lms-schema', 'mifostenant-default', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'filepath', 'outbound.jlgcollection.process.spw', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.jlgcollection.process', 'integration-db', 'oltp/chimera-intg', 'Y');
-REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.receiptack.process', 'filepath', 'inbound.receiptack.process.spw', 'Y');
-REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('inbound.receiptack.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('ffsc.writecsv.fromdb', 'filepath', 'ffsc.writecsv.fromdb.spw', 'Y');
+REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('ffsc.writecsv.fromdb', 'ffsc_full-db', 'oltp/ffsc_full-db', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.receiptack.process', 'integration-schema', 'chimera_integration', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.receiptack.process', 'lms-schema', 'mifostenant-default', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.receiptack.process', 'filepath', 'outbound.receiptack.process.spw', 'Y');
 REPLACE INTO `spw_process_config` (`process`, `variable`, `value`, `active`) VALUES ('outbound.receiptack.process', 'integration-db', 'oltp/chimera-intg', 'Y');
+
+update spw_process_config set variable='ffsc_full-db' and value = 'oltp/ffsc_full-db' where process = 'ffsc.writecsv.fromdb';
 
 
 REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, `active`) VALUES ('publish.demandforecast.process#1', 'publish.demandforecast.process', 'lms', 'oltp/chimera-intg', 'Y');
@@ -365,9 +367,9 @@ REPLACE INTO `spw_instance_config` (`instance`, `process`, `variable`, `value`, 
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('basepath', 'root', 'Y');
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('runmode', 'single', 'Y');
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('audit', 'audit/chimera-audit', 'Y');
-REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-db','oltp/chimera-intg','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('ffsc_full-db','oltp/ffsc_full-db','Y');
 REPLACE INTO spw_common_config (variable,value,active) values('mifos-db','oltp/mifos-intg','Y');
-REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('integration-schema','chimera_integration','Y');
+REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('ffsc_full-schema','ffsc_full','Y');
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('lms-schema','mifostenant-default','Y');
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('json.storagepath', '/var/lib/mysql/chimera_integration', 'Y');
 REPLACE INTO `spw_common_config` (`variable`, `value`, `active`) VALUES ('json.storagepath', 'F:/mariadb/data/chimera_integration', 'Y');

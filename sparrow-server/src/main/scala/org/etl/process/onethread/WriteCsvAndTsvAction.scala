@@ -34,11 +34,12 @@ class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
 
     val conn = ResourceAccess.rdbmsConn(from)
     conn.setAutoCommit(false)
-
-    val stmt = conn.createStatement
+    
+    val stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)
+    stmt.setFetchSize(Integer.MIN_VALUE)
     val ars: ResultSet = stmt.executeQuery(sqlList)
     val ncols: Int = ars.getMetaData.getColumnCount
-    conn.commit
+    
 
     val fop: FileOutputStream = new FileOutputStream(to)
     val out: Writer = new OutputStreamWriter(new BufferedOutputStream(fop))
@@ -58,10 +59,12 @@ class WriteCsvAndTsvAction extends org.etl.command.Action with LazyLogging {
         column = column.replaceAll("[^a-zA-Z0-9-:]", " ")
         out.append("\""+column+"\"")
         if (i < ncols) out.append(delim) else out.append("\r\n")
+        println("----")
       }
     }
 
     out.close()
+    conn.commit
     logger.info("Completed WriteCsvAndTsv id#{}, name#{}, from#{}, sqlList#{}", id, name, from, sqlList)
 
     stmt.close
