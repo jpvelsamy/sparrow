@@ -1,0 +1,21 @@
+process "delete.final.process"
+{
+	try
+	{
+
+		transform as "DROP-table" on "audit/ffsc-sqldb" using
+		{
+		"IF OBJECT_ID('DataCleansing.dbo.${tablename}', 'U') IS NOT NULL  DROP TABLE DataCleansing.dbo.${tablename};" 
+		
+		}	
+		
+	}
+	
+	}
+	catch
+	{
+	}
+	finally
+	{
+	}
+}

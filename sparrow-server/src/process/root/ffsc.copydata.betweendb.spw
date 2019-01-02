@@ -2,10 +2,17 @@ process "ffsc.model.training"
 {
 	try
 	{
-		copydata as "trainseq" from "${ffsc-db}" to "${ffsc-db}" with-batch "100" using
+	
+	
+		copydata as "trainseq" from "${ffsc-sqldb}" to "${ffsc-db}" with-batch "8" using
 		{
+<<<<<<< HEAD
 			"select * from BasicDataMapping_FFSC_Customers limit 10;
 			insert ignore into ffc values"
+=======
+			"select * from DataCleansing.dbo.Funnel_${process-id};
+			insert ignore into Funnel_(${process-id}-1) values"
+>>>>>>> 73ff3215c3b4c942710f1c007cffca80df26c05d
 		}
 		transform as "create-table" on "${ffsc-db}" using
 		{

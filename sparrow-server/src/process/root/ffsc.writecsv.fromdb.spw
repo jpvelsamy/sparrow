@@ -4,7 +4,11 @@ process "ffsc.writecsv.fromdb"
 	{
 		writecsvandtsv as "writetocsv" from "${ffsc_full-db}" to "${csv.storagepath}${process-id}_dbtocsv.csv" with "," using
 		{
+<<<<<<< HEAD
 			"select * from approved_final limit 50;"
+=======
+			"select * from unapprovedleads;"
+>>>>>>> 73ff3215c3b4c942710f1c007cffca80df26c05d
 		}
 
 	}
