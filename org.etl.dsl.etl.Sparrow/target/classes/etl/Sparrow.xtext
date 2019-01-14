@@ -1,0 +1,259 @@
+grammar org.etl.Sparrow with org.eclipse.xtext.common.Terminals
+
+generate sparrow "http://www.junome.in/sparrow"
+
+
+Process:
+	'process' name=STRING
+	'{'
+	   try=Try
+	   catch=Catch
+	   finally=Finally
+	   	
+	'}';
+
+Try :
+	'try' name=ID
+	'{'
+		(action+=Action)*
+	'}'
+;
+
+Finally:
+	'finally' name=ID
+	'{'
+		(action+=Action)*
+	'}'
+;
+
+Catch:
+	'catch' name=ID
+	'{'
+		(action+=Action)*
+	'}'
+;
+
+Action:
+	(Copydata
+	|LoadCsv
+	|WriteCsv
+	|Transform
+	|GooglecalPUT
+	|SlackPUT
+	|ClickSendSms
+	|Updatedaudit 
+	|Callprocess
+	|Fetch
+	|TrelloPUT
+	|TrelloGET
+	|Rest
+	|Doozle
+	|Dropfile
+	|FBCLead
+	|GoogleSendMail
+	|GooglecontactPUT
+	|GooglecontactSelectAll
+	|Abort
+	|SmsLeadSms
+	)
+;
+
+SmsLeadSms:
+	'smsleadssms' 'as' name=STRING  'on' url=STRING 'with-sender' sender=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING  'from-source' dbSrc=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression 'do-dryrun-with' dryrunNumber=STRING
+;
+
+
+Abort:
+	'abort' 'as' name=STRING 
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+
+
+GooglecontactSelectAll:
+	'gcontact-fetchall' 'as' name=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING 'with-key' ptwelveFile=STRING 'for-project' project=STRING 'on-behalf-of' impersonatedUser=STRING 'to-target' dbSrc=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+GoogleSendMail:
+	'gsendmail' 'as' name=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING 'with-key' ptwelveFile=STRING 'for-project' project=STRING 'on-behalf-of' impersonatedUser=STRING 'from-source' dbSrc=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+
+GooglecontactPUT:
+	'gcontact' 'as' name=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING 'with-key' ptwelveFile=STRING 'for-project' project=STRING 'on-behalf-of' impersonatedUser=STRING 'from-source' dbSrc=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+GooglecalPUT:
+	'gcalendar' 'as' name=STRING 'through-account' account=STRING 'secured-by' privateKey=STRING 'with-key' ptwelveFile=STRING 'for-project' project=STRING 'on-behalf-of' impersonatedUser=STRING 'from-source' dbSrc=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+FBCLead:
+	'fblc' 'as' name=STRING 'secured-by' accessToken=STRING 'with-key' appSecret=STRING 'through-user' accountId=STRING 'for-campaign' campaignId=STRING 'into' target=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+Dropfile:
+	'dropfile' 'as' name=STRING 'in-path' target=STRING 'on-condition' condition=Expression
+;
+
+Doozle:
+	'doozle' 'as' name=STRING 'in-table' target=STRING 'on' on=STRING 'using'
+	'{'
+		value=CreateStatement
+	'}' 'on-condition' condition=Expression
+;
+
+
+
+Rest:
+	'rest' 'as' name=STRING 'secured-by' authtoken=STRING 'with-url' url=STRING 'and-method-as' method=STRING
+	'{'
+		'from' resourcedatafrom=STRING 'update-url-with' '{'
+				urldata=SelectStatement
+		'}'
+		'from' headerdatafrom=STRING 'update-header-with' '{'
+				headerdata=SelectStatement  
+			'}'
+		'from' postdatafrom=STRING 'update-body-with' '{'
+				'parent' 'as' parentName=STRING parentdata=SelectStatement 
+				parts+=(RestPart)*
+		'}'
+		'into' ackdatato=STRING 'store-ack-at' '{'
+				ackdata=SelectStatement 
+		'}'
+	'}' 'on-condition' condition=Expression
+;
+
+RestPart:
+	'part' 'as' partName=STRING 'with' partData=SelectStatement
+; 
+
+TrelloGET:
+	'trelloget' 'as' name=STRING 'secured-by' authtoken=STRING 'with-key' key=STRING 'through-user' useraccount=STRING 'from-board' board=STRING 'to' target=STRING 'using'
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+TrelloPUT:
+	'trelloput' 'as' name=STRING 'secured-by' authtoken=STRING 'with-key' key=STRING 'through-user' useraccount=STRING 'for-list' list=STRING 'from-source' source=STRING 'using'
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+
+Fetch:
+	'assign' 'as' name=STRING 'source' source=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+Callprocess:
+	'callprocess' 'as' name=STRING 'with-target' target=STRING 'from-file' source=STRING 'using' datasource=STRING 'for-every' 
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+Updatedaudit:
+	'log' 'as' name=STRING 'logto' logsink=STRING 'in' datasource=STRING 'using' 
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+ClickSendSms:
+	'c2sms' 'as' name=STRING 'with-user' userid=STRING 'secured-by' securityKey=STRING 'from-source' target=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+SlackPUT:
+	'slackput' 'as' name=STRING 'to' team=STRING 'on' channel=STRING 'using'
+	'{'
+		value=STRING
+	'}' 'on-condition' condition=Expression
+;
+
+
+	
+Copydata:
+	'copydata' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'using'
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+
+WriteCsv:
+	'writecsv' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'with'  delim= STRING 'using'
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+LoadCsv:
+	'loadcsv' 'as' name= STRING 'from' source= STRING 'to' to= STRING 'with'  delim= STRING 'using'
+	'{'
+		value=SelectStatement
+	'}' 'on-condition' condition=Expression
+;
+
+Transform:
+	'transform' 'as' name= STRING 'on' on= STRING 'using'
+	 '{'
+		value+=NonSelectStatement
+	'}' 'on-condition' condition=Expression
+	
+;
+
+
+
+Column:
+	STRING
+;
+SelectStatement:
+	STRING
+;	
+
+NonSelectStatement:
+	STRING
+;
+
+CreateStatement:
+	STRING
+;
+
+
+
+
+Expression :
+	'if' lhs=STRING operator=Operator rhs=STRING
+;
+
+Operator:
+	'<'|'>'|'=='|'contains'	
+;
+
