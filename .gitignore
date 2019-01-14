@@ -17,4 +17,3 @@ hs_err_pid*
 sparrow-server/.cache-tests
 sparrow-server/.settings/org.scala-ide.sdt.core.prefs
 sparrow-server/.cache-main
-sparrow-server/target
