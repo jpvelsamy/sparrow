@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.etl.dsl.etl.Sparrow</groupId>
 		<artifactId>org.etl.dsl.etl.Sparrow.parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>sparrow-server</artifactId>
 	<description>A smart etl framework based on xtext and actors</description>
@@ -255,7 +255,7 @@
 		<dependency>
 			<groupId>org.etl.dsl.etl.Sparrow</groupId>
 			<artifactId>org.etl.dsl.etl.Sparrow</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>2.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
