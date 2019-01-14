@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature id="org.etl.dsl.etl.Sparrow.feature"
 	label="Sparrow Feature "
-	version="1.0.0.qualifier">
+	version="2.0.0.qualifier">
 	<plugin
 			id="org.etl.dsl.etl.Sparrow"
 			download-size="0"
