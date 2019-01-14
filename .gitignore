@@ -15,7 +15,6 @@ hs_err_pid*
 
 .project
 .settings/
-org.etl.dsl.etl.Sparrow/xtend-gen/
 sparrow-server/.cache-tests
 sparrow-server/.settings/org.scala-ide.sdt.core.prefs
 sparrow-server/.cache-main
