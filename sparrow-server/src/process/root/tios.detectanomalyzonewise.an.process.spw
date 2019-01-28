@@ -1,0 +1,48 @@
+process "tios.detectanomalyzonewise.an.process"
+{
+	try{	
+	   transform as "create_temporary_table_process" on "${anomalize-database}" using
+		{
+			"CREATE TABLE `${process-id}_anomaly_identification` ( `load_mwh` double DEFAULT NULL,  `date` datetime DEFAULT NULL,`zone` varchar(1000) DEFAULT NULL,  `anomaly_result` varchar(1000) NOT NULL);"
+		}
+		runR as "tios.detectanomalyzonewise.an.process" mode-as "remote"
+		{"
+			library(tidyverse);
+			library(anomalize);
+			library(tibbletime);
+			library(${anomalize-dbType});
+			
+			dbConnection <- dbConnect(${anomalize-dbType-function}(), user='${anomalize-user}', password='${anomalize-password}', dbname='${anomalize-database}', host='${anomalize-url}');
+			filterZoneQuery <- 'select created_time,load_mwh,zone from miso_hourly_load where zone= ? ';
+			resultSet <- dbSendQuery(dbConnection, filterZoneQuery, list('${zone}'));
+			dataSource <- dbFetch(resultSet);
+			dataSource<- group_by(dataSource,zone);
+			dataSource<- tbl_df(dataSource);
+			Sys.setenv(TZ = '${sys-timezone}')
+			dataSource$created_time<- as.POSIXct(dataSource$created_time,format='${time-format}', tz='${sys-timezone}');
+			formattedData <- as_tbl_time(dataSource, index = created_time);
+			formattedData<-na.omit(formattedData)
+			
+			anomalyResult<-formattedData %>% 
+			   time_decompose(load_mwh,method = '${time-decompose-method}',frequency = '${time-decompose-frequency}',trend = '${time-decompose-trend}',merge = TRUE,message = FALSE)%>%
+			   anomalize(remainder, method = '${anomalize-method}', alpha = ${anomalize-alpha}) ;
+			
+			anomalyResultWithProcess<-cbind(anomalyResult, process_id=${process-id})
+			insertAnomalyQuery <- 'INSERT INTO  ${process-id}_anomaly_identification(`date`, `load_mwh`, `zone`, `anomaly_result`) values(?,?,?,?)';
+			res<-dbExecute(dbConnection, insertAnomalyQuery, list(anomalyResultWithProcess$created_time, anomalyResultWithProcess$load_mwh,anomalyResultWithProcess$zone,anomalyResultWithProcess$anomaly));
+			dbDisconnect(dbConnection);			
+      "} 
+	 transform as "load_processed_data" on "${anomalize-database}" using
+		  {
+			  "insert into identified_anomaly_all_zone(`date`, `load_mwh`, `zone`, `anomaly_result`,process_id) select `date`, `load_mwh`, `zone`, `anomaly_result`,${process-id} from ${process-id}_anomaly_identification ;"
+		  }
+	}
+	catch{}
+	finally{
+	      transform as "drop_temporary_table_process" on "${anomalize-database}" using
+		  {
+			   "DROP TABLE `${process-id}_anomaly_identification` ;"
+		  }
+	}
+	
+}        

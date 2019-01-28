@@ -1,0 +1,16 @@
+process "tios.detectanomalyzonewise.ad.process"
+{
+	try{	
+			
+		callprocess as "generate-lead-tranform"
+		with-target "candycrm.wppush.leadingestion"
+		from-file "candycrm.wppush.leadingestion.spw"
+		using "${integration-db}" for-every 		
+		{
+			"SELECT zone_name as zone from zone_master"			
+		}
+			
+		}
+		catch{}
+			finally{}
+}			

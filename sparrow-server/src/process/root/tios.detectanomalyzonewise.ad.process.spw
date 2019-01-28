@@ -1,0 +1,27 @@
+process "tios.detectanomalyzonewise.ad.process"
+{
+	try{	
+	
+	    transform as "create_temporary_table_process" on "${anomalize-database}" using
+		{
+			"CREATE TABLE `${process-id}_anomaly_detection` ( index int ,`anomaly` double DEFAULT NULL,  `timezone` datetime DEFAULT NULL,`timestamp` varchar(1000) DEFAULT NULL,  `expectedValue` double NOT NULL);"
+		}
+		runR as "tios.detectanomalyzonewise.ad.process" mode-as remote
+		{"
+			  java -cp /home/anu/sample/mahout-naive-bayes-example/target/twitter-naive-bayes-example-1.0-jar-with-dependencies.jar com.chimpler.example.bayes.TweetTSVToSeq /home/anu/eclipse-workspace/FFSC/output-onlinetsvtools.tsv /home/anu/sample/mahout-naive-bayes-example/tweets_damoen-seq
+			      
+		 "} 
+          transform as "load_processed_data" on "${anomalize-database}" using
+		  {
+			  "insert into identified_anomaly_all_zone_by_detection(index,anomaly,timezone,timestamp,expectedValue,process_id) select index,anomaly,timezone,timestamp,expectedValue,${process-id} from ${process-id}_anomaly_detection ;"
+		  }
+	}
+	catch{}
+	finally{
+	      transform as "drop_temporary_table_process" on "${anomalize-database}" using
+		  {
+			   "DROP TABLE `${process-id}_anomaly_detection` ;"
+		  }
+	}
+	
+}        
